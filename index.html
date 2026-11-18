@@ -101,7 +101,7 @@
   /* ===== Раздел «Игры» (по портал-версии) ===== */
   #gamesPage { --gs: inset 0 0 0 1px rgba(255,255,255,.03), inset 1.8px 3px 0 -2px rgba(255,255,255,.27), inset -2px -2px 0 -2px rgba(255,255,255,.24), inset -3px -8px 1px -6px rgba(255,255,255,.18), inset -.3px -1px 4px 0 rgba(0,0,0,.24), inset -1.5px 2.5px 0 -2px rgba(0,0,0,.4), inset 0 3px 4px -2px rgba(0,0,0,.4), inset 2px -6.5px 1px -4px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.2), 0 6px 16px 0 rgba(0,0,0,.16);
     --accent: #c5e5ff; display: none; position: fixed; inset: 0; z-index: 1; overflow-y: auto; overscroll-behavior: contain;
-    padding: calc(env(safe-area-inset-top, 0px) + 72px) 0 calc(env(safe-area-inset-bottom, 0px) + 130px); }
+    padding: calc(env(safe-area-inset-top, 0px) + var(--tg-safe-area-inset-top, 0px) + var(--tg-content-safe-area-inset-top, 0px) + 72px) 0 calc(env(safe-area-inset-bottom, 0px) + 130px); }
   #gamesPage.active { display: block; }
   .gq-wrap { max-width: 448px; margin: 0 auto; padding: 0 16px; }
   .gq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -373,6 +373,9 @@
   const tg = window.Telegram && window.Telegram.WebApp;
   if (tg) {
     tg.ready(); tg.expand();
+    // на весь экран (Telegram 8.0+; на старых версиях просто остаётся expand)
+    try { if (tg.requestFullscreen && !tg.isFullscreen) tg.requestFullscreen(); } catch (e) {}
+    try { if (tg.disableVerticalSwipes) tg.disableVerticalSwipes(); } catch (e) {}
     const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
     if (u) {
       const ava = document.getElementById('ava');
@@ -496,7 +499,6 @@
   }
   function holdMaintenance() {
     CAP = 50;
-    document.querySelector('.label b').textContent = 'ТЕХРАБОТЫ';
     // проверяем раз в 10 сек: вдруг работы закончились или тебя добавили в список
     const poll = setInterval(async () => {
       const st = await getStatus();
