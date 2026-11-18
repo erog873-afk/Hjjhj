@@ -478,7 +478,7 @@
   // Включаются и выключаются в боте: /admin → «Техработы». Допущенных людей тоже добавляешь там.
   // Мини-апп спрашивает у сервера бота; сервер сам проверяет подпись Telegram и отвечает:
   //   { "maintenance": true|false, "allowed": true|false }
-  const STATUS_URL = 'https://advertisers-brand-individually-beliefs.trycloudflare.com.';   // TODO: адрес, где запущен бот
+  const STATUS_URL = 'https://advertisers-brand-individually-beliefs.trycloudflare.com/api/status';   // TODO: адрес, где запущен бот
   async function getStatus() {
     try {
       const r = await fetch(STATUS_URL, {
